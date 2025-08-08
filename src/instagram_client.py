@@ -78,29 +78,29 @@ class InstagramClient:
     @rate_limit
     @retry_on_error()
     def get_hashtag_info(self, hashtag: str) -> dict:
-        hashtag = hashtag.strip('#')
+        hashtag = hashtag.strip('#').lower()  # Instagram hashtags are case-insensitive
         logger.info(f"Fetching info for hashtag: #{hashtag}")
         return self.client.hashtag_info(hashtag)
     
     @rate_limit
     @retry_on_error()
     def get_hashtag_medias_recent(self, hashtag: str, amount: int = 27) -> list:
-        hashtag = hashtag.strip('#')
+        hashtag = hashtag.strip('#').lower()  # Instagram hashtags are case-insensitive
         amount = min(amount, config.MAX_POSTS_PER_HASHTAG)
         logger.info(f"Fetching {amount} recent posts for #{hashtag}")
         
-        hashtag_info = self.get_hashtag_info(hashtag)
-        return self.client.hashtag_medias_recent(hashtag_info.id, amount)
+        # hashtag_medias_recent expects the hashtag name, not the ID
+        return self.client.hashtag_medias_recent(hashtag, amount)
     
     @rate_limit
     @retry_on_error()
     def get_hashtag_medias_top(self, hashtag: str, amount: int = 9) -> list:
-        hashtag = hashtag.strip('#')
+        hashtag = hashtag.strip('#').lower()  # Instagram hashtags are case-insensitive
         amount = min(amount, config.MAX_POSTS_PER_HASHTAG)
         logger.info(f"Fetching {amount} top posts for #{hashtag}")
         
-        hashtag_info = self.get_hashtag_info(hashtag)
-        return self.client.hashtag_medias_top(hashtag_info.id, amount)
+        # hashtag_medias_top expects the hashtag name, not the ID
+        return self.client.hashtag_medias_top(hashtag, amount)
     
     @rate_limit
     @retry_on_error()

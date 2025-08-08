@@ -12,7 +12,7 @@ from src.session_manager import SessionManager
 from src.instagram_client import InstagramClient
 
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG,  # Changed to DEBUG to see more details
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
         logging.StreamHandler(sys.stdout),

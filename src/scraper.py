@@ -91,6 +91,10 @@ class HashtagScraper:
     
     def _extract_post_data(self, media: Any) -> PostData:
         try:
+            # Debug: Let's see what attributes the user object actually has
+            logger.debug(f"User object type: {type(media.user)}")
+            logger.debug(f"User object attributes: {dir(media.user)}")
+            
             hashtags = self._extract_hashtags(media.caption_text) if media.caption_text else []
             mentioned_users = self._extract_mentions(media.caption_text) if media.caption_text else []
             
@@ -98,8 +102,7 @@ class HashtagScraper:
                 pk=str(media.user.pk),
                 username=media.user.username,
                 full_name=media.user.full_name,
-                is_private=media.user.is_private,
-                is_verified=media.user.is_verified
+                is_private=media.user.is_private
             )
             
             location_info = None
@@ -164,7 +167,7 @@ class HashtagScraper:
         filepath = output_path / filename
         
         with open(filepath, 'w', encoding='utf-8') as f:
-            json.dump(data.dict(), f, indent=2, ensure_ascii=False)
+            json.dump(data.model_dump(mode='json'), f, indent=2, ensure_ascii=False)
         
         logger.info(f"Data saved to: {filepath}")
         return filepath

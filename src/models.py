@@ -9,7 +9,6 @@ class UserInfo(BaseModel):
     username: str
     full_name: Optional[str] = None
     is_private: bool = False
-    is_verified: bool = False
     follower_count: Optional[int] = None
     following_count: Optional[int] = None
     media_count: Optional[int] = None
