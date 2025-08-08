@@ -1,0 +1,12 @@
+2025-08-08 13:18:42,223 - __main__ - INFO - Attempting to login to Instagram...
+2025-08-08 13:18:42,224 - src.session_manager - INFO - Attempting fresh login...
+2025-08-08 13:18:42,224 - instagrapi - INFO - https://i.instagram.com/api/v1/launcher/sync/
+2025-08-08 13:18:42,508 - private_request - INFO - jita9764 [200] POST https://i.instagram.com/api/v1/launcher/sync/ (269.0.0.18.75, OnePlus 6T Dev)
+2025-08-08 13:18:43,187 - instagrapi - INFO - https://i.instagram.com/api/v1/accounts/login/
+2025-08-08 13:18:49,940 - private_request - INFO - jita9764 [200] POST https://i.instagram.com/api/v1/accounts/login/ (269.0.0.18.75, OnePlus 6T Dev)
+2025-08-08 13:19:19,946 - instagrapi - INFO - https://i.instagram.com/api/v1/feed/reels_tray/
+2025-08-08 13:19:20,318 - private_request - INFO - jita9764 [200] POST https://i.instagram.com/api/v1/feed/reels_tray/ (269.0.0.18.75, OnePlus 6T Dev)
+2025-08-08 13:19:50,324 - instagrapi - INFO - https://i.instagram.com/api/v1/feed/timeline/
+2025-08-08 13:19:52,386 - private_request - INFO - jita9764 [200] POST https://i.instagram.com/api/v1/feed/timeline/ (269.0.0.18.75, OnePlus 6T Dev)
+2025-08-08 13:19:52,390 - src.session_manager - INFO - Login successful and session saved
+2025-08-08 13:19:52,390 - __main__ - INFO - ✅ Login successful! Session saved.
