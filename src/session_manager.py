@@ -1,5 +1,7 @@
 import json
 import logging
+import random
+import time
 from pathlib import Path
 from typing import Optional, Dict, Any
 
@@ -7,6 +9,7 @@ from instagrapi import Client
 from instagrapi.exceptions import LoginRequired, PleaseWaitFewMinutes
 
 from .config import config
+from .human_behavior import HumanBehavior
 
 logger = logging.getLogger(__name__)
 
@@ -35,10 +38,12 @@ class SessionManager:
             except Exception:
                 pass
     
-    def login(self) -> Client:
+    def login(self, warm_up: bool = True) -> Client:
         try:
             if self._try_load_session():
                 logger.info("Successfully logged in using saved session")
+                if warm_up:
+                    self._warm_up_session()
                 return self.client
         except Exception as e:
             logger.warning(f"Failed to use saved session: {e}")
@@ -47,6 +52,11 @@ class SessionManager:
             logger.info("Attempting fresh login...")
             config.validate()
             
+            # Add a delay before login to appear more human
+            login_delay = random.uniform(2, 5)
+            logger.debug(f"Waiting {login_delay:.1f}s before login...")
+            time.sleep(login_delay)
+            
             self.client.login(
                 config.INSTAGRAM_USERNAME,
                 config.INSTAGRAM_PASSWORD
@@ -54,6 +64,10 @@ class SessionManager:
             
             self._save_session()
             logger.info("Login successful and session saved")
+            
+            if warm_up:
+                self._warm_up_session()
+            
             return self.client
             
         except PleaseWaitFewMinutes as e:
@@ -98,6 +112,20 @@ class SessionManager:
     def _load_session_file(self) -> Dict[str, Any]:
         with open(self.session_file, 'r') as f:
             return json.load(f)
+    
+    def _warm_up_session(self):
+        """Warm up the session with human-like behavior."""
+        try:
+            logger.info("Warming up session with human-like behavior...")
+            behavior = HumanBehavior(self.client)
+            
+            # Random warm-up duration between 30-90 seconds
+            duration = random.randint(30, 90)
+            behavior.warm_up_session(duration)
+            
+            logger.info("Warm-up complete, session ready for use")
+        except Exception as e:
+            logger.warning(f"Warm-up failed (non-fatal): {e}")
     
     def logout(self):
         try:

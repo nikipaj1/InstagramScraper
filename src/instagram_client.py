@@ -65,14 +65,15 @@ def retry_on_error(max_retries: int = None, delay: float = None):
 
 
 class InstagramClient:
-    def __init__(self, session_manager: Optional[SessionManager] = None):
+    def __init__(self, session_manager: Optional[SessionManager] = None, warm_up: bool = True):
         self.session_manager = session_manager or SessionManager()
         self._client: Optional[Client] = None
+        self.warm_up = warm_up
     
     @property
     def client(self) -> Client:
         if not self._client:
-            self._client = self.session_manager.login()
+            self._client = self.session_manager.login(warm_up=self.warm_up)
         return self._client
     
     @rate_limit

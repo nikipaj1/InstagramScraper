@@ -47,11 +47,15 @@ def login():
 @click.option('--no-top', is_flag=True, help='Skip scraping top posts')
 @click.option('--output', '-o', default='output', help='Output directory for JSON files')
 @click.option('--pretty', is_flag=True, help='Pretty print output to console')
-def scrape(hashtag, recent, top, no_top, output, pretty):
+@click.option('--no-warmup', is_flag=True, help='Skip warm-up session (not recommended)')
+def scrape(hashtag, recent, top, no_top, output, pretty, no_warmup):
     try:
         logger.info(f"Starting scrape for hashtag: {hashtag}")
         
-        scraper = HashtagScraper()
+        # Create client with warm-up control
+        from src.instagram_client import InstagramClient
+        client = InstagramClient(warm_up=not no_warmup)
+        scraper = HashtagScraper(client=client)
         data = scraper.scrape_hashtag(
             hashtag=hashtag,
             max_recent=recent,
@@ -96,6 +100,25 @@ def logout():
         logger.info("✅ Logged out successfully!")
     except Exception as e:
         logger.error(f"❌ Logout failed: {e}")
+
+
+@cli.command()
+@click.option('--duration', '-d', default=60, help='Duration in seconds to warm up (default: 60)')
+def warmup(duration):
+    """Warm up the session with human-like browsing behavior."""
+    try:
+        logger.info(f"Starting warm-up session for {duration} seconds...")
+        session_manager = SessionManager()
+        client = session_manager.login(warm_up=False)  # Don't double warm-up
+        
+        from src.human_behavior import HumanBehavior
+        behavior = HumanBehavior(client)
+        behavior.warm_up_session(duration)
+        
+        logger.info("✅ Warm-up completed successfully!")
+    except Exception as e:
+        logger.error(f"❌ Warm-up failed: {e}")
+        sys.exit(1)
 
 
 @cli.command()
